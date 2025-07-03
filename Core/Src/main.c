@@ -80,7 +80,7 @@ int main(void)
   SystemClock_Config();
 
   /* USER CODE BEGIN SysInit */
-
+  ClockSetUp();
   /* USER CODE END SysInit */
 
   /* Initialize all configured peripherals */
@@ -168,14 +168,19 @@ int ClockSetUp(void){
 
     /*clear PLLN(multiplier) bits field  */
     RCC->PLLCFGR&= ~RCC_PLLCFGR_PLLN_Msk;
-    /* set multiplier to 8 */
-    RCC->PLLCFGR|= (0x08<<RCC_PLLCFGR_PLLN_Pos);
+    /* set multiplier to 16 */
+    RCC->PLLCFGR|= (0x016<<RCC_PLLCFGR_PLLN_Pos);
 
     /* clear PLLM (divider) value bits field */
     RCC->PLLCFGR&= ~RCC_PLLCFGR_PLLM_Msk;
     /* set PLLM divider to 3. The smallest value PLLM could have it's 1, so when we write 0 to this field, PLLM will be set to 1,
      * so when we want to achieve 3 value, we should add 2 to its bits field*/
     RCC->PLLCFGR|= (0x02 <<RCC_PLLCFGR_PLLM_Pos);
+    /*if we use PLL for system clock it's needed to enable and use PLLR divider (minimum value is 2)     */
+    RCC->PLLCFGR&= ~RCC_PLLCFGR_PLLR_Msk;
+    RCC->PLLCFGR|=(0<<RCC_PLLCFGR_PLLR_Pos); /* SYSCLK = PLL/PLLR(2)*/
+    /* enable PLL(R) divider */
+    RCC->PLLCFGR|=(1<<RCC_PLLCFGR_PLLREN_Pos);
 
 
     /* clear PLL SRC value bits field */
@@ -219,7 +224,7 @@ int ClockSetUp(void){
  		   (RCC->CFGR & RCC_CFGR_SWS_Msk) /* select only SWS bits from an entire register * ( 0bxxxx10xxx - CFGR register,
  		    							after mask we keep only _____10__ value)*/
  		   !=
- 		   (0b11<<RCC_CFGR_SWS_Pos) /* compare with value 2 (2+1) (HSE) that we set, shifted to position where those bits are,
+ 		   (0b11<<RCC_CFGR_SWS_Pos) /* compare with value 3 that we set, shifted to position where those bits are,
  		    											_____10__
  		    										!=
  		    										  2<<Pos (__)	*/
@@ -227,7 +232,7 @@ int ClockSetUp(void){
 
      /* After we switched to HSE for PLL, we can turn off HSI for power saving */
      RCC->CR&= ~(1<<RCC_CR_HSION_Pos);
-     while(RCC->CR & (1<<RCC_CR_HSIRDY_Pos)){}
+     while((RCC->CR & (1<<RCC_CR_HSIRDY_Pos)!=0)){}
 
      return 0;
 
