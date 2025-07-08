@@ -50,7 +50,7 @@ int main(void)
  *         HSI is disabled after switching to PLL for power saving.
  * @retval 0 on success, -1 on HSE timeout error
  */
-int ClockSetUp(void){
+int8_t ClockSetUp(void){
 
  /*straightforward type int specification, using volatile to prevent SW optimization,
   like taking the value from a cash structure */
@@ -149,7 +149,7 @@ int ClockSetUp(void){
     }
 
 /* Set portA pinNumber output mode */
-int ConfiguratePA(int pintNumber){
+int8_t ConfiguratePA(uint8_t pintNumber){
 	/* Enable clock for GPIOA */
 	RCC->AHB2ENR|=(1<<RCC_AHB2ENR_GPIOAEN_Pos);
 	/* clean pintNumber field bits, each pin has 2 bits*/
@@ -160,12 +160,12 @@ int ConfiguratePA(int pintNumber){
 	return 0;
 }
 
-void setPinLow(unsigned short int pinNumber){
+void setPinLow(uint8_t pinNumber){
 
 	GPIOA->BSRR = (1<<(pinNumber + 16));
 }
 
-void setPinHigh(unsigned int pinNumber){
+void setPinHigh(uint8_t pinNumber){
 
 	GPIOA->BSRR = (1<<pinNumber);
 }

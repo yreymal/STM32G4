@@ -32,13 +32,13 @@ extern "C" {
 #define LED2_PIN 5U
 
 /* Private function prototypes -----------------------------------------------*/
-int ClockSetUp(void);
+int8_t ClockSetUp(void);
 
-int ConfiguratePA(int pintNumber);
+int8_t ConfiguratePA(uint8_t pintNumber);
 
-void setPinHigh(unsigned int pinNumber);
+void setPinHigh(uint8_t pinNumber);
 
-void setPinLow(unsigned short int pinNumber);
+void setPinLow(uint8_t pinNumber);
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 
