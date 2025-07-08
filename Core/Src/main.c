@@ -17,18 +17,6 @@
   */
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
-
-/* Defines ------------------------------------------------------------------*/
-#define LED2_PIN 5U
-
-/* Private function prototypes -----------------------------------------------*/
-int ClockSetUp(void);
-
-int ConfiguratePA(int pintNumber);
-
-void setPinHigh(unsigned int pinNumber);
-
-void setPinLow(unsigned short int pinNumber);
 /**
   * @brief  The application entry point.
   * @retval int

@@ -27,8 +27,18 @@ extern "C" {
 #endif
 
 /* Includes ------------------------------------------------------------------*/
-#include "stm32g4xx_hal.h"
+#include "stm32g431xx.h"
+/* Defines ------------------------------------------------------------------*/
+#define LED2_PIN 5U
 
+/* Private function prototypes -----------------------------------------------*/
+int ClockSetUp(void);
+
+int ConfiguratePA(int pintNumber);
+
+void setPinHigh(unsigned int pinNumber);
+
+void setPinLow(unsigned short int pinNumber);
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 
