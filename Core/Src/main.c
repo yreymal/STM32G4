@@ -38,14 +38,14 @@ int main(void)
   /* Configure the system clock */
   ClockSetUp();
 
-
+/* set LED2 pin output logic 0 and 1 for blinking */
   ConfiguratePA(LED2_PIN);
 
   while (1)
   {
     /* USER CODE END WHILE */
 	  setPinLow(LED2_PIN);
-     for (volatile int i = 0; i < 1000000; ++i){}
+      for (volatile int i = 0; i < 1000000; ++i){}
 	  setPinHigh(LED2_PIN);
 	  for (volatile int i = 0; i < 1000000; ++i){}
     /* USER CODE BEGIN 3 */
@@ -54,9 +54,14 @@ int main(void)
 }
 
 /**
-  * @brief System Clock Configuration
-  * @retval yreymak
-  */
+ * @brief  Configures the system clock (SYSCLK) to 64 MHz using the PLL.
+ *         The PLL is sourced from a 24 MHz external HSE oscillator.
+ *         Configuration:
+ *             PLLM = 3, PLLN = 16, PLLR = 2
+ *             SYSCLK = (24 MHz / 3) * 16 / 2 = 64 MHz
+ *         HSI is disabled after switching to PLL for power saving.
+ * @retval 0 on success, -1 on HSE timeout error
+ */
 int ClockSetUp(void){
 
  /*straightforward type int specification, using volatile to prevent SW optimization,
@@ -153,10 +158,9 @@ int ClockSetUp(void){
      while((RCC->CR & (1<<RCC_CR_HSIRDY_Pos))!=0){}
 
      return 0;
-
-
     }
 
+/* Set portA pinNumber output mode */
 int ConfiguratePA(int pintNumber){
 	/* Enable clock for GPIOA */
 	RCC->AHB2ENR|=(1<<RCC_AHB2ENR_GPIOAEN_Pos);
@@ -166,7 +170,6 @@ int ConfiguratePA(int pintNumber){
 	GPIOA->MODER|=(0b01<<(RCC_AHB2ENR_GPIOAEN_Pos + pintNumber*2));
 
 	return 0;
-
 }
 
 void setPinLow(unsigned short int pinNumber){
